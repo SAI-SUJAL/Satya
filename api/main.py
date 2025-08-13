@@ -1,11 +1,33 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from mangum import Mangum
 import os
+import json
+import hashlib
+import secrets
+from typing import Dict, List, Optional
+from datetime import datetime, timedelta
+import traceback
+import sqlite3
+from flask import request, session, jsonify
+import sqlite3
+from fastapi import FastAPI, Header, Request, Form, UploadFile, File as FastAPIFile, HTTPException, Depends, Cookie, status
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field, EmailStr
 from dotenv import load_dotenv
-load_dotenv()
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
+import os
+from openai import OpenAI
+# from models import Base, Chat
+from fastapi import File
+from fpdf import FPDF
+import io
+from fastapi import File, UploadFile
 
-# Agno imports
+# --- All necessary agno imports ---
 from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.models.openai import OpenAIChat
@@ -13,8 +35,7 @@ from agno.memory.v2.db.sqlite import SqliteMemoryDb
 from agno.memory.v2.memory import Memory
 from agno.storage.sqlite import SqliteStorage
 from agno.media import File
-
-app = FastAPI()
+from fastapi import Body
 # Load environment variables from .env file
 load_dotenv()
 
@@ -533,9 +554,7 @@ app.add_middleware(
 templates = Jinja2Templates(directory="templates")
 
 health_agent = HealthAgent()
-@app.get("/", response_class=JSONResponse)
-def root():
-    return {"message": "Hello from SatyaAI!"}
+
 # --- Authentication Endpoints ---
 @app.post("/auth/signup", response_class=JSONResponse)
 async def signup(user_data: UserSignup):
@@ -792,9 +811,8 @@ async def debug_body(request: Request):
         "body_raw": body_str
     }
 
-@app.post("/", response_class=JSONResponse)
-def root_post():
-    return {"message": "Hello from SatyaAI via POST!"}
-
-# Vercel entrypoint
-handler = Mangum(app)
+if __name__ == "__main__":
+    import uvicorn
+    print("Starting Satya Health Assistant API...")
+    print("Make sure to set your OpenAI API key in the .env file")
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
