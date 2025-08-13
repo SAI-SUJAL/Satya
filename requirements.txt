@@ -8,3 +8,4 @@ openai
 agno
 requests
 jinja2
+mangum
