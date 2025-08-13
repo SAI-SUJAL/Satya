@@ -26,7 +26,7 @@ from fastapi import File
 from fpdf import FPDF
 import io
 from fastapi import File, UploadFile
-
+from mangum import Mangum 
 # --- All necessary agno imports ---
 from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
@@ -813,8 +813,10 @@ async def debug_body(request: Request):
         "body_raw": body_str
     }
 
-if __name__ == "__main__":
-    import uvicorn
-    print("Starting Satya Health Assistant API...")
-    print("Make sure to set your OpenAI API key in the .env file")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+app = FastAPI()
+@app.post("/", response_class=JSONResponse)
+def root_post():
+    return {"message": "Hello from SatyaAI via POST!"}
+
+# Vercel entrypoint
+handler = Mangum(app)
