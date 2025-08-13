@@ -554,7 +554,9 @@ app.add_middleware(
 templates = Jinja2Templates(directory="templates")
 
 health_agent = HealthAgent()
-
+@app.get("/", response_class=JSONResponse)
+def root():
+    return {"message": "Hello from SatyaAI!"}
 # --- Authentication Endpoints ---
 @app.post("/auth/signup", response_class=JSONResponse)
 async def signup(user_data: UserSignup):

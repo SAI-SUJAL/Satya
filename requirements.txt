@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-dotenv
+pydantic
+sqlalchemy
+fpdf
+openai
+agno
+requests
+jinja2
