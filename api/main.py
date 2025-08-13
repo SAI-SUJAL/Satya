@@ -1,33 +1,11 @@
-import os
-import json
-import hashlib
-import secrets
-from typing import Dict, List, Optional
-from datetime import datetime, timedelta
-import traceback
-import sqlite3
-from flask import request, session, jsonify
-import sqlite3
-from fastapi import FastAPI, Header, Request, Form, UploadFile, File as FastAPIFile, HTTPException, Depends, Cookie, status
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, EmailStr
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
+from fastapi.responses import JSONResponse
+from mangum import Mangum
 import os
-from openai import OpenAI
-# from models import Base, Chat
-from fastapi import File
-from fpdf import FPDF
-import io
-from fastapi import File, UploadFile
-from mangum import Mangum 
-# --- All necessary agno imports ---
+from dotenv import load_dotenv
+load_dotenv()
+
+# Agno imports
 from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.models.openai import OpenAIChat
@@ -35,7 +13,8 @@ from agno.memory.v2.db.sqlite import SqliteMemoryDb
 from agno.memory.v2.memory import Memory
 from agno.storage.sqlite import SqliteStorage
 from agno.media import File
-from fastapi import Body
+
+app = FastAPI()
 # Load environment variables from .env file
 load_dotenv()
 
@@ -813,7 +792,6 @@ async def debug_body(request: Request):
         "body_raw": body_str
     }
 
-app = FastAPI()
 @app.post("/", response_class=JSONResponse)
 def root_post():
     return {"message": "Hello from SatyaAI via POST!"}
